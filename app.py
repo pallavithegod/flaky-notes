@@ -1,5 +1,4 @@
 import os
-import traceback
 
 from flask import Flask, jsonify
 
@@ -23,7 +22,7 @@ def index():
       <p>A demo notes service monitored by RecallOps.</p>
       <ul>{items}</ul>
       <form action="/notes/export" method="get">
-        <button style="padding: 0.6rem 1.4rem; font-size: 1rem;">Export notes (crashes the app)</button>
+        <button style="padding: 0.6rem 1.4rem; font-size: 1rem;">Export notes</button>
       </form>
     </body></html>"""
 
@@ -32,14 +31,9 @@ def index():
 def notes_export():
     try:
         return jsonify(export_notes())
-    except Exception as error:
-        # Export corruption is unrecoverable for this worker; crash so the
-        # supervisor can restart it (and RecallOps can diagnose the incident).
-        # os._exit is used because the dev server runs handlers in threads,
-        # where SystemExit would not terminate the process.
-        traceback.print_exc()
-        print(f"FATAL: notes export failed: {error!r}", flush=True)
-        os._exit(1)
+    except Exception:
+        app.logger.exception("notes export failed")
+        return jsonify(error="notes export failed"), 500
 
 
 if __name__ == "__main__":
