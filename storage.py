@@ -12,6 +12,6 @@ def list_notes():
 
 def export_notes():
     return [
-        {"id": note["id"], "title": note["title"], "body": note["body"]}
+        {"id": note["id"], "title": note["title"], "body": note.get("body", "")}
         for note in NOTES
     ]
