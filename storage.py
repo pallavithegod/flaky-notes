@@ -1,7 +1,7 @@
 NOTES = [
     {"id": 1, "title": "Ship the demo", "body": "Crash an app, watch the PR appear."},
     {"id": 2, "title": "Retro notes", "body": "Remember to rotate the API keys."},
-    # BUG: this legacy record has no "body" field, so exporting raises KeyError.
+    # Legacy record without a body; exports should tolerate missing content.
     {"id": 3, "title": "Migration leftovers"},
 ]
 
